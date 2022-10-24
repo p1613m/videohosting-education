@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
@@ -47,7 +48,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => false,
             'errors' => [
-                'email' => ['Incorrect login date'],
+                'email' => ['Incorrect login data'],
             ],
         ], 422);
     }
