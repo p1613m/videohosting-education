@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\Api\VideoManageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/registration', [AuthController::class, 'registration']);
 Route::post('/auth', [AuthController::class, 'auth']);
+Route::get('/videos', [VideoController::class, 'search']);
+Route::get('/videos/{video}', [VideoController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -25,5 +28,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/profile', [UserController::class, 'profile']);
     Route::patch('/profile', [UserController::class, 'update']);
 
-    Route::post('/videos', [VideoController::class, 'store']);
+    Route::get('/videos/my', [VideoManageController::class, 'list']);
+    Route::post('/videos', [VideoManageController::class, 'store']);
+    Route::patch('/videos/{video}', [VideoManageController::class, 'update']);
+    Route::delete('/videos/{video}', [VideoManageController::class, 'delete']);
+
+    Route::post('/videos/{video}/like', [VideoController::class, 'toggleLike']);
 });

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\VideoRequest;
+use App\Http\Resources\VideoFullResource;
+use App\Http\Resources\VideoResource;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,20 +12,45 @@ use Illuminate\Support\Facades\Auth;
 
 class VideoController extends Controller
 {
+    // todo: phpdoc
+    public function search()
+    {
+        $perPage = request('per_page', 10);
+        $videos = Video::query()
+            // ->where('status', 'publish') todo: uncomment
+            ->orderBy('created_at', 'DESC');
+
+        // todo: search
+
+        return VideoResource::collection($videos->paginate($perPage));
+    }
+
     /**
-     * Create video
+     * Get video
      *
-     * @param VideoRequest $request
+     * @param Video $video
+     * @return VideoFullResource
+     */
+    public function show(Video $video): VideoFullResource
+    {
+        return VideoFullResource::make($video);
+    }
+
+    /**
+     * Toggle like
+     *
+     * @param Video $video
      * @return Response
      */
-    public function store(VideoRequest $request): Response
+    public function toggleLike(Video $video): Response
     {
-        $videoData = [
-            'video_path' => $request->file('video_file')->store('videos'),
-            'cover_path' => $request->file('cover_file')->store('covers'),
-        ];
-
-        Auth::user()->videos()->create($videoData + $request->validated());
+        if(!$video->hasLike()) {
+            $video->likes()->create([
+                'user_id' => Auth::id(),
+            ]);
+        } else {
+            $video->likes()->where('user_id', Auth::id())->delete();
+        }
 
         return response()->noContent();
     }
