@@ -17,11 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/registration', [AuthController::class, 'registration']);
-Route::post('/auth', [AuthController::class, 'auth']);
-Route::get('/videos', [VideoController::class, 'search']);
-Route::get('/videos/{video}', [VideoController::class, 'show']);
-
 Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/logout', [AuthController::class, 'logout']);
 
@@ -35,3 +30,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/videos/{video}/like', [VideoController::class, 'toggleLike']);
 });
+
+Route::post('/registration', [AuthController::class, 'registration']);
+Route::post('/auth', [AuthController::class, 'auth']);
+Route::get('/videos', [VideoController::class, 'search']);
+Route::get('/videos/{video}', [VideoController::class, 'show']);

@@ -25,6 +25,13 @@ class Video extends Model
         'status',
     ];
 
+    static $statuses = [
+        'on-check',
+        'publish',
+        'rejected',
+        'archived',
+    ];
+
     /**
      * Video's likes
      *
@@ -47,6 +54,7 @@ class Video extends Model
 
     /**
      * Video's user relationship
+     *
      * @return HasOne
      */
     public function user(): HasOne

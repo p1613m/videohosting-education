@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,3 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', [AdminController::class, 'authForm'])->name('login');
+Route::post('/login', [AdminController::class, 'auth'])->name('login-send');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+    Route::get('/admin-panel', [AdminController::class, 'videos'])->name('videos');
+    Route::get('/videos/{video}', [AdminController::class, 'showVideo'])->name('show-video');
+    Route::get('/videos/{video}/change-status', [AdminController::class, 'changeStatus'])->name('change-status');
+    Route::get('/videos/{video}/delete', [AdminController::class, 'delete'])->name('delete');
+});
